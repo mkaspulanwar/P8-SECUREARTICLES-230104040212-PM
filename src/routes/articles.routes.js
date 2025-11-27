@@ -1,32 +1,31 @@
-// Memanggil Router dari Express
 const router = require("express").Router();
+const validate = require("../middlewares/validate.middleware");
+const verifyToken = require("../middlewares/auth.middleware");
+const requireRole = require("../middlewares/role.middleware");
 
-// Memanggil fungsi controller yang telah dibuat sebelumnya
 const {
-  listArticles, // Controller untuk HTTP GET
-  createArticle, // Controller untuk HTTP POST
+  createArticleSchema,
+  updateArticleSchema,
+  listArticlesSchema
+} = require("../utils/articles.validation");
+
+const {
+  listArticles,
+  createArticle,
+  updateArticle,
+  deleteArticle,
 } = require("../controllers/articles.controller");
 
-// --- Definisi Rute ---
+// public list
+router.get("/", validate(listArticlesSchema), listArticles);
 
-/**
- * Rute: GET /
- * Mengambil daftar semua artikel.
- * Controller: listArticles
- */
-router.get("/", listArticles);
+// protected create (user/admin)
+router.post("/", verifyToken, requireRole("user", "admin"), validate(createArticleSchema), createArticle);
 
-/**
- * Rute: POST /
- * Membuat artikel baru.
- * Controller: createArticle
- *
- * Catatan: Asumsikan middleware otentikasi (JWT) akan ditambahkan di sini
- * pada pengembangan selanjutnya (misalnya, router.post("/", authenticateJWT, createArticle);)
- */
-router.post("/", createArticle);
+// protected update (owner/admin checked in service)
+router.put("/:id", verifyToken, validate(updateArticleSchema), updateArticle);
 
-// --- Export Router ---
+// admin only delete
+router.delete("/:id", verifyToken, requireRole("admin"), deleteArticle);
 
-// Mengekspor objek router agar bisa digunakan oleh file utama Express (misalnya app.js atau index.js)
 module.exports = router;

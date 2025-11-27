@@ -1,75 +1,68 @@
-// Memanggil model Article dari layer repository
 const Article = require("../repositories/articles.repo");
 
-/**
- * @function getAllArticles
- * Mengambil daftar artikel dari database dengan fitur paging, filter, dan sorting.
- *
- * @param {object} query - Objek query dari request (misalnya req.query)
- * @param {number} [query.page=1] - Nomor halaman yang diminta.
- * @param {number} [query.limit=10] - Jumlah item per halaman.
- * @param {string} [query.status] - Filter berdasarkan status (misalnya 'published').
- * @param {string} [query.tag] - Filter berdasarkan tag tertentu.
- * @returns {object} Objek yang berisi data paging dan hasil artikel.
- */
 async function getAllArticles(query) {
-  // 1. Menentukan Parameter Paging
-  const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || 10;
-  // Menghitung jumlah dokumen yang akan dilewati (skip)
+  // (tetap seperti Langkah 3)
+  const page = Number(query.page || 1);
+  const limit = Number(query.limit || 10);
   const skip = (page - 1) * limit;
 
-  // 2. Membangun Objek Filter Mongoose
   const filter = {};
-
-  // Menambahkan filter status jika ada di query
-  if (query.status) {
-    filter.status = query.status;
+  if (query.status) filter.status = query.status;
+  if (query.tag) filter.tags = query.tag;
+  if (query.q) {
+    filter.$or = [
+      { title: { $regex: query.q, $options: "i" } },
+      { content: { $regex: query.q, $options: "i" } },
+    ];
   }
 
-  // Menambahkan filter tag jika ada di query
-  if (query.tag) {
-    // Mongoose akan mencari dokumen yang memiliki elemen tag yang cocok
-    filter.tags = query.tag;
-  }
+  const sortBy = query.sortBy || "createdAt";
+  const order = query.order === "asc" ? 1 : -1;
 
-  // 3. Mengambil Data Artikel
-  const articles = await Article.find(filter)
-    .skip(skip) // Melewati dokumen untuk implementasi paging
-    .limit(limit) // Membatasi jumlah dokumen yang diambil
-    .sort({
-      createdAt: -1
-    }); // Mengurutkan berdasarkan waktu pembuatan terbaru (-1 = descending)
+  const results = await Article.find(filter)
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: order });
 
-  // 4. Menghitung Total Dokumen yang Sesuai Filter
   const total = await Article.countDocuments(filter);
 
-  // 5. Mengembalikan Hasil
-  return {
-    page,
-    limit,
-    total,
-    results: articles,
-  };
+  return { page, limit, total, results };
 }
 
-/**
- * @function createArticle
- * Membuat dan menyimpan artikel baru ke database.
- *
- * @param {object} data - Data artikel baru (title, content, tags, dll.).
- * @returns {object} Dokumen artikel yang baru saja tersimpan.
- */
-async function createArticle(data) {
-  // Membuat instance dokumen Article baru
-  const article = new Article(data);
-
-  // Menyimpan dokumen ke database dan mengembalikannya
+async function createArticle(data, user) {
+  const article = new Article({
+    ...data,
+    author: user.email,     // set author otomatis dari JWT
+    authorId: user.id,      // untuk ownership check (kita simpan)
+  });
   return await article.save();
 }
 
-// --- Export Fungsi-Fungsi Service ---
+async function updateArticle(id, data, user) {
+  const article = await Article.findById(id);
+  if (!article) return null;
+
+  // owner OR admin
+  const isOwner = article.authorId === user.id;
+  const isAdmin = user.role === "admin";
+
+  if (!isOwner && !isAdmin) {
+    const err = new Error("Forbidden: not owner");
+    err.statusCode = 403;
+    throw err;
+  }
+
+  Object.assign(article, data);
+  return await article.save();
+}
+
+async function deleteArticle(id) {
+  return await Article.findByIdAndDelete(id);
+}
+
 module.exports = {
   getAllArticles,
   createArticle,
+  updateArticle,
+  deleteArticle,
 };

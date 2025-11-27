@@ -1,60 +1,61 @@
-// Memanggil utilitas respons (diasumsikan berisi fungsi ok dan created)
-const {
-  ok,
-  created
-} = require("../utils/response");
-
-// Memanggil fungsi logika bisnis dari Service Layer
+const { ok, created } = require("../utils/response");
 const ArticleService = require("../services/articles.service");
+const { toArticleDTO, toArticleListDTO } = require("../utils/articles.dto");
 
-// --- Fungsi Controller ---
-
-/**
- * @function listArticles
- * Mengambil dan mengembalikan daftar artikel.
- * Controller ini berinteraksi dengan ArticleService dan menangani respons/error.
- *
- * @param {object} req - Objek Request (berisi req.query untuk filter/paging)
- * @param {object} res - Objek Response
- * @param {function} next - Middleware untuk meneruskan error ke handler error global
- */
 async function listArticles(req, res, next) {
   try {
-    // Memanggil fungsi Service untuk mendapatkan data artikel
     const result = await ArticleService.getAllArticles(req.query);
-
-    // Mengirim respons OK (HTTP 200) dengan hasil data
-    return ok(res, result);
+    return ok(res, toArticleListDTO(result));
   } catch (err) {
-    // Meneruskan error ke middleware error handler
     next(err);
   }
 }
 
-/**
- * @function createArticle
- * Membuat artikel baru berdasarkan data yang diterima dari body request.
- *
- * @param {object} req - Objek Request (berisi req.body untuk data artikel)
- * @param {object} res - Objek Response
- * @param {function} next - Middleware untuk meneruskan error ke handler error global
- */
 async function createArticle(req, res, next) {
   try {
-    // Memanggil fungsi Service untuk membuat artikel baru
-    const article = await ArticleService.createArticle(req.body);
-
-    // Mengirim respons CREATED (HTTP 201) dengan dokumen artikel yang baru dibuat
-    return created(res, article);
+    const article = await ArticleService.createArticle(req.body, req.user);
+    return created(res, toArticleDTO(article));
   } catch (err) {
-    // Meneruskan error (misalnya, error validasi Mongoose) ke middleware error handler
     next(err);
   }
 }
 
-// --- Export Fungsi Controller ---
+async function updateArticle(req, res, next) {
+  try {
+    const article = await ArticleService.updateArticle(
+      req.params.id,
+      req.body,
+      req.user
+    );
+    if (!article) {
+      return res.status(404).json({
+        success: false,
+        message: "Article not found",
+        cid: req.correlationId,
+      });
+    }
 
-module.exports = {
-  listArticles,
-  createArticle,
-};
+    return ok(res, toArticleDTO(article), "Updated");
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deleteArticle(req, res, next) {
+  try {
+    const deleted = await ArticleService.deleteArticle(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Article not found",
+        cid: req.correlationId,
+      });
+    }
+
+    return res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listArticles, createArticle, updateArticle, deleteArticle };
