@@ -1,11 +1,9 @@
-# 🛡️ Praktikum #8: Secure & Observable RESTful CRUD API
-
-### **Web Service Engineering (WSE) - 20251**
+# 🛡️ Praktikum #8: Secure & Observable RESTful CRUD API - Web Service Engineering (WSE)
 
 ---
 
 
-## 🚀 Pendahuluan
+## Pendahuluan
 
 Repositori ini berisi implementasi dari **Modul Praktikum #8** mata kuliah Web Service Engineering. Fokus utama praktikum ini adalah membangun *RESTful API* tingkat lanjut dengan penekanan pada **keamanan (*Security Hardening*)**, **otentikasi dan otorisasi (*JWT Authentication & Role-Based Access Control / RBAC*)**, serta **observabilitas (*Logging, Metrics, Tracing*)**.
 
