@@ -1,6 +1,19 @@
 # PRAKTIKUM #8: SECURE & OBSERVABLE RESTFUL CRUD API - WEB SERVICE ENGINEERING (WSE)
 
----
+<div align="center">
+   
+[![Status Proyek](https://img.shields.io/badge/Status-Completed-success.svg?style=flat)]()
+[![Tingkat Praktikum](https://img.shields.io/badge/WSE%20Module-8%20(Advanced)-informational.svg?style=flat)]()
+[![Lisensi](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://opensource.org/licenses/MIT)
+[![Dibuat dengan Node.js](https://img.shields.io/badge/Node.js-18%2B-339933.svg?style=flat&logo=node.js&logoColor=white)]()
+[![Framework Express](https://img.shields.io/badge/Framework-Express.js-000000.svg?style=flat&logo=express&logoColor=white)]()
+[![Database](https://img.shields.io/badge/Database-MongoDB-47A248.svg?style=flat&logo=mongodb&logoColor=white)]()
+[![Autentikasi](https://img.shields.io/badge/Security-JWT%20%26%20RBAC-critical.svg?style=flat&logo=jsonwebtokens&logoColor=white)]()
+[![Hardening](https://img.shields.io/badge/API%20Hardening-Rate%20Limit%2FValidation-important.svg?style=flat)]()
+[![Observability](https://img.shields.io/badge/Observability-Logging%2FMetrics-ff69b4.svg?style=flat&logo=grafana&logoColor=white)]()
+[![API Docs](https://img.shields.io/badge/Documentation-OpenAPI%20(Swagger)-orange.svg?style=flat&logo=openapi-initiative)]()
+
+</div>
 
 ## Pendahuluan
 
