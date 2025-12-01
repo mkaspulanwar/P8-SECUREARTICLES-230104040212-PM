@@ -55,6 +55,64 @@ Proyek ini mengimplementasikan API **CRUD** untuk *resource* **Articles** (atau 
 
 ---
 
+## 📂 Struktur Direktori Proyek
+
+Struktur ini merepresentasikan arsitektur proyek yang digunakan, memisahkan lapisan aplikasi (Controller, Service, Model) dengan lapisan infrastruktur (Middleware, Config, Utility) untuk mencapai *Separation of Concerns*.
+```bash
+P8-SECUREARTICLES-230104040212
+├── bukti/
+├── node_modules/
+├── src/
+│   ├── config/
+│   │   ├── db.js
+│   │   └── env.js
+│   ├── controllers/
+│   │   ├── articles.controller.js
+│   │   ├── auth.controller.js
+│   │   └── system.controller.js
+│   ├── docs/
+│   │   └── openapi.yaml
+│   ├── middlewares/
+│   │   ├── auth.middleware.js
+│   │   ├── correlationId.middleware.js
+│   │   ├── error.middleware.js
+│   │   ├── notFound.middleware.js
+│   │   ├── rateLimit.middleware.js
+│   │   ├── role.middleware.js
+│   │   └── validate.middleware.js
+│   ├── repositories/
+│   │   ├── articles.repo.js
+│   │   └── users.repo.js
+│   ├── routes/
+│   │   ├── articles.routes.js
+│   │   ├── auth.routes.js
+│   │   └── system.routes.js
+│   ├── services/
+│   │   ├── articles.service.js
+│   │   └── auth.service.js
+│   ├── utils/
+│   │   ├── articles.dto.js
+│   │   ├── articles.validation.js
+│   │   ├── auth.validation.js
+│   │   ├── jwt.js
+│   │   ├── logger.js
+│   │   ├── response.js
+│   │   ├── app.js
+│   │   └── server.js
+│   └── tests/
+│       ├── articles.test.js
+│       └── auth.test.js
+├── .env
+├── .env.example
+├── nodemon.json
+├── package.json
+├── package-lock.json
+└── README.md
+
+```
+
+---
+
 ## Instalasi dan Konfigurasi
 
 Ikuti langkah-langkah berikut untuk menjalankan proyek secara lokal.
