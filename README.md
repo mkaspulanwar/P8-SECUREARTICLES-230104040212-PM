@@ -1,13 +1,14 @@
-# 🛡️ Praktikum #8: Secure & Observable RESTful CRUD API - Web Service Engineering (WSE)
+# PRAKTIKUM #8: SECURE & OBSERVABLE RESTFUL CRUD API - WEB SERVICE ENGINEERING (WSE)
 
 ---
-
 
 ## Pendahuluan
 
 Repositori ini berisi implementasi dari **Modul Praktikum #8** mata kuliah Web Service Engineering. Fokus utama praktikum ini adalah membangun *RESTful API* tingkat lanjut dengan penekanan pada **keamanan (*Security Hardening*)**, **otentikasi dan otorisasi (*JWT Authentication & Role-Based Access Control / RBAC*)**, serta **observabilitas (*Logging, Metrics, Tracing*)**.
 
 Proyek ini mengimplementasikan API **CRUD** untuk *resource* **Articles** (atau *resource* yang Anda pilih) dan dilengkapi dengan *Authentication Endpoints* standar industri.
+
+---
 
 ## Tim Developer
 
@@ -18,8 +19,7 @@ Proyek ini mengimplementasikan API **CRUD** untuk *resource* **Articles** (atau 
 
 ---
 
-
-## ✨ Fitur Utama
+## Fitur Utama
 
 * **RESTful Design**: Mematuhi prinsip-prinsip REST (Resource, Method, Status Code, Stateless).
 * **JWT Authentication**:
@@ -42,7 +42,7 @@ Proyek ini mengimplementasikan API **CRUD** untuk *resource* **Articles** (atau 
 
 ---
 
-## 🛠️ Teknologi dan Dependensi
+## Teknologi dan Dependensi
 
 | Kategori | Teknologi/Pustaka | Deskripsi |
 | :--- | :--- | :--- |
@@ -55,7 +55,7 @@ Proyek ini mengimplementasikan API **CRUD** untuk *resource* **Articles** (atau 
 
 ---
 
-## ⚙️ Instalasi dan Konfigurasi
+## Instalasi dan Konfigurasi
 
 Ikuti langkah-langkah berikut untuk menjalankan proyek secara lokal.
 
@@ -66,9 +66,59 @@ git clone [https://github.com/yourusername/nama-repo-praktikum-8.git](https://gi
 cd nama-repo-praktikum-8
 ```
 
+### 2. Instalasi Dependensi
 
-## 📌 Tabel Endpoint Project Praktikum #8
-🔐 AUTH ENDPOINTS
+```bash
+npm install
+# atau
+yarn install
+```
+
+### 3. Konfigurasi Environment Variables
+Buat file .env di root proyek dan isi dengan konfigurasi yang diperlukan.
+
+⚠️ PERHATIAN: Jangan commit file .env ke repositori!
+
+```bash
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=user
+DB_PASSWORD=password
+DB_NAME=wse_praktikum8
+
+# JWT Secrets (Harus Kuat dan Rahasia!)
+JWT_ACCESS_SECRET="ganti-dengan-string-unik-dan-panjang"
+JWT_REFRESH_SECRET="ganti-dengan-string-unik-dan-panjang-lainnya"
+ACCESS_TOKEN_LIFETIME=1h
+REFRESH_TOKEN_LIFETIME=7d
+
+# Rate Limit Configuration
+RATE_LIMIT_WINDOW_MS=60000 # 1 minute
+RATE_LIMIT_MAX_REQUESTS=100
+```
+
+### 4. Menjalankan Server
+
+Mode Pengembangan (Development)
+```bash
+npm run dev 
+# Server akan berjalan di http://localhost:3000
+```
+Mode Produksi (Production)
+```bash
+npm run build
+npm start
+```
+
+##  Tabel Endpoint Project Praktikum #8
+
+### AUTH ENDPOINTS
 
  | Method | Endpoint             | Auth            | Deskripsi                                |
 | ------ | -------------------- | --------------- | ---------------------------------------- |
@@ -78,7 +128,8 @@ cd nama-repo-praktikum-8
 | POST   | `/api/auth/logout`   | ✔️ Access Token | Logout & invalidate refreshToken         |
 | GET    | `/api/auth/me`       | ✔️ Access Token | Ambil profil user dari JWT               |
 
-📰 ARTICLES ENDPOINTS (CRUD + RBAC)
+### ARTICLES ENDPOINTS (CRUD + RBAC)
+
 | Method | Endpoint            | Auth            | Role        | Deskripsi                                 |
 | ------ | ------------------- | --------------- | ----------- | ----------------------------------------- |
 | GET    | `/api/articles`     | ❌ Public        | public      | List all articles + pagination + search   |
@@ -86,7 +137,8 @@ cd nama-repo-praktikum-8
 | PUT    | `/api/articles/:id` | ✔️ Access Token | owner/admin | Update article                            |
 | DELETE | `/api/articles/:id` | ✔️ Access Token | admin       | Hapus article                             |
 
-⚙️ SYSTEM / OBSERVABILITY
+### SYSTEM / OBSERVABILITY
+
 | Method | Endpoint  | Auth     | Deskripsi                          |
 | ------ | --------- | -------- | ---------------------------------- |
 | GET    | `/health` | ❌ Public | Cek status server                  |
