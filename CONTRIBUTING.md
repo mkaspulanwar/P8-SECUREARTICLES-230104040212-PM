@@ -14,7 +14,7 @@ Mohon laporkan semua bug, error, atau saran fitur baru melalui tab **Issues** di
 
 1.  **Kloning Repositori:**
     ```bash
-    git clone [URL_REPOSITORI_ANDA]
+    git clone https://github.com/mkaspulanwar/P8-SECUREARTICLES-230104040212-PM
     cd nama-repo-praktikum-8
     ```
 2.  **Instalasi Dependensi:**
